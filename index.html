@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Código Familiar: Que no te Suplanten</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F6FC;--bg2:#ECE9F8;--card:#FFFFFF;--fg:#1A1829;--mut:#4A4468;
+  --acc:#5B21B6;--acc2:#6D28D9;--line:#D1C8F0;--red:#991B1B;--grn:#166534;
+  --on:#FFFFFF;--grid:rgba(91,33,182,.05);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F0D1A;--bg2:#181528;--card:#1F1B36;--fg:#F5F3FF;--mut:#C4BDE0;
+    --acc:#8B5CF6;--acc2:#A78BFA;--line:#382F5E;--red:#EF4444;--grn:#10B981;
+    --on:#0F0D1A;--grid:rgba(139,92,246,.08)
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F0D1A;--bg2:#181528;--card:#1F1B36;--fg:#F5F3FF;--mut:#C4BDE0;
+  --acc:#8B5CF6;--acc2:#A78BFA;--line:#382F5E;--red:#EF4444;--grn:#10B981;
+  --on:#0F0D1A;--grid:rgba(139,92,246,.08)
+}
+
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 4.5rem);scroll-behavior:smooth;font-size:100%}
+html.z1{font-size:112%}html.z2{font-size:125%}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--fg);
+  font:1.2rem/1.7 "Atkinson Hyperlegible",Verdana,Arial,sans-serif;
+  text-align:justify;
+  text-justify:inter-word;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+
+h1,h2,h3{font-family:Merriweather,Georgia,serif;line-height:1.3;margin:0;text-align:left}
+p{margin-top:0;margin-bottom:1rem}
+
+.wrap{max-width:920px;margin:0 auto;padding:0 1.2rem}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:2px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:.6rem;min-height:4.2rem}
+.brand{display:flex;align-items:center;gap:.6rem;font:900 1.1rem Merriweather,Georgia,serif;color:var(--fg);text-decoration:none}
+.brand svg{width:2.2rem;height:2.2rem;flex-shrink:0}
+
+.ctl{display:flex;gap:.5rem}
+button{font:inherit}
+.btn,.ctl button{
+  font:700 1rem "Atkinson Hyperlegible",sans-serif;
+  min-height:3rem;min-width:3rem;
+  border-radius:99px;border:2px solid var(--acc);
+  background:var(--acc);color:var(--on);
+  padding:.5rem 1.2rem;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  text-align:center;
+}
+.ctl button{background:transparent;color:var(--fg);padding:.4rem .8rem}
+.btn.o{background:transparent;color:var(--fg)}
+:focus-visible{outline:4px solid var(--acc2);outline-offset:3px}
+
+.hero{
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:40px 40px;
+  padding:2rem 0 2rem;
+}
+.hero-header{
+  text-align:center;
+  margin-bottom:1.8rem;
+}
+.hero-header h1,.hero-header h1 em{text-align:center}
+.hero-header .lead{text-align:center;max-width:44rem;margin:1rem auto 0}
+
+/* Historia animada: estafador vs. abuela */
+.story{
+  max-width:760px;margin:0 auto 2rem;
+  background:var(--card);border:2px solid var(--line);border-radius:1.5rem;
+  padding:1rem 1rem 1.1rem;box-shadow:0 8px 20px rgba(0,0,0,.06);
+}
+.scene{display:block;width:100%;height:auto}
+.scene text{font-family:"Atkinson Hyperlegible",Verdana,sans-serif;font-weight:700}
+.scene .lbl{font-size:22px;fill:var(--fg);letter-spacing:.06em}
+.scene .say{font-size:21px;fill:#1E293B}
+.scene .note{font-size:20px;fill:var(--mut)}
+
+.steps{display:grid;list-style:none;margin:.8rem 0 0;padding:0}
+.steps li{
+  grid-area:1/1;display:flex;gap:.9rem;align-items:flex-start;
+  text-align:left;opacity:0;
+}
+.steps .n{
+  flex:none;width:2.4rem;height:2.4rem;border-radius:50%;
+  background:var(--acc);color:var(--on);font:900 1.2rem Merriweather,Georgia,serif;
+  display:flex;align-items:center;justify-content:center;
+}
+.steps b{display:block;font-size:1.2rem;line-height:1.35;margin-bottom:.15rem}
+.steps span.q{display:block;color:var(--mut);font-size:1.1rem;line-height:1.45}
+.steps li:nth-child(1){animation:s1 12s infinite}
+.steps li:nth-child(2){animation:s2 12s infinite}
+.steps li:nth-child(3){animation:s3 12s infinite}
+.steps li:nth-child(4){animation:s4 12s infinite}
+
+.story-bar{display:flex;align-items:center;gap:.8rem;margin-top:.9rem}
+.prog{flex:1;height:.5rem;border-radius:99px;background:var(--bg2);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--acc2);animation:prog 12s linear infinite}
+.story-bar button{
+  font:700 .95rem "Atkinson Hyperlegible",sans-serif;color:var(--fg);background:transparent;
+  border:2px solid var(--acc);border-radius:99px;min-height:2.6rem;padding:.3rem 1rem;cursor:pointer;
+}
+.story.paused *{animation-play-state:paused !important}
+
+/* Fases de la escena (ciclo de 12 s, 4 pasos de 3 s) */
+.p1{animation:s1 12s infinite}
+.p2{animation:s2 12s infinite}
+.p3{animation:s3 12s infinite}
+.p4{animation:s4 12s infinite}
+.p123{animation:s123 12s infinite}
+.p12{animation:s12 12s infinite}
+.ghost{animation:ghost 12s infinite}
+.shake3{animation:shake3 12s infinite}
+.flow{animation:flow 1s linear infinite}
+.bars rect{transform-box:fill-box;transform-origin:center bottom;animation:bar .7s ease-in-out infinite alternate}
+.bars rect:nth-child(2){animation-delay:.15s}.bars rect:nth-child(3){animation-delay:.3s}
+.bars rect:nth-child(4){animation-delay:.1s}.bars rect:nth-child(5){animation-delay:.25s}
+
+@keyframes s1{0%,23%{opacity:1}25%,98%{opacity:0}100%{opacity:1}}
+@keyframes s2{0%,23%{opacity:0}25%,48%{opacity:1}50%,100%{opacity:0}}
+@keyframes s3{0%,48%{opacity:0}50%,73%{opacity:1}75%,100%{opacity:0}}
+@keyframes s4{0%,73%{opacity:0}75%,98%{opacity:1}100%{opacity:0}}
+@keyframes s123{0%,73%{opacity:1}75%,98%{opacity:0}100%{opacity:1}}
+@keyframes s12{0%,48%{opacity:1}50%,98%{opacity:0}100%{opacity:1}}
+@keyframes ghost{0%,75%{opacity:1}80%,98%{opacity:.25}100%{opacity:1}}
+@keyframes shake3{0%,50%{transform:translateX(0)}53%{transform:translateX(-5px)}56%{transform:translateX(5px)}59%{transform:translateX(-5px)}62%{transform:translateX(5px)}65%,100%{transform:translateX(0)}}
+@keyframes flow{to{stroke-dashoffset:-18}}
+@keyframes bar{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+@keyframes prog{from{width:0}to{width:100%}}
+
+.tag{display:inline-block;background:var(--acc);color:var(--on);font-weight:700;font-size:.85rem;letter-spacing:.08em;padding:.3rem .9rem;border-radius:99px;margin-bottom:.8rem;text-align:left}
+h1 em{display:block;font-style:normal;color:var(--acc2)}
+.lead{font-size:1.25rem;margin:1rem 0 0;color:var(--mut)}
+
+.conf{background:var(--card);border:2px solid var(--line);border-radius:1.4rem;padding:1.4rem;box-shadow:0 4px 15px rgba(0,0,0,0.03)}
+.conf small{font-weight:700;letter-spacing:.08em;color:var(--acc2);display:block;text-align:left}
+.big{font:700 clamp(1.15rem,3.5vw,1.5rem)/1.4 Merriweather,Georgia,serif;margin:.5rem 0 .8rem;text-align:left}.big i{color:var(--acc2)}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:.8rem;align-items:stretch;margin-top:1rem}
+.side{border-radius:1rem;padding:1rem;font-size:1rem;line-height:1.5}.side b{display:block;font-size:1.1rem;margin-bottom:.3rem;text-align:left}
+.side.r{background:rgba(153,27,27,.08);border:2px solid var(--red)}.side.g{background:rgba(22,101,52,.08);border:2px solid var(--grn)}
+.mid{align-self:center;font:900 1.2rem Merriweather,serif;color:var(--acc2);text-align:center}
+
+.pills{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.4rem}
+.pills a{background:var(--bg2);border:2px solid var(--line);color:var(--fg);text-decoration:none;font-weight:700;padding:.6rem 1.1rem;border-radius:99px;min-height:3rem;display:inline-flex;align-items:center;text-align:center}
+
+section{padding:2.5rem 0 1rem}
+.sub{color:var(--mut);margin:.6rem 0 1.6rem;max-width:42rem}
+.i{width:1.6rem;height:1.6rem;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* Carruseles */
+.car{margin:0 0 2.4rem}
+.ch{display:flex;gap:.8rem;align-items:center;margin-bottom:.8rem}
+.ch b{display:block;font:900 1.3rem Merriweather,serif;text-align:left}.ch span{color:var(--mut);font-size:.95rem;display:block;text-align:left}
+.num{width:2.8rem;height:2.8rem;border-radius:50%;background:var(--k);color:#fff;display:grid;place-items:center;font:900 1.3rem Merriweather,serif;flex:none}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:1rem;scrollbar-width:none;border-radius:1.2rem}
+.track::-webkit-scrollbar{display:none}
+.sl{flex:0 0 100%;scroll-snap-align:center;background:var(--card);border:2px solid var(--line);border-top:8px solid var(--k);border-radius:1.2rem;padding:1.5rem;min-height:19rem}
+.ico{width:4.2rem;height:4.2rem;border-radius:50%;background:var(--k);color:#fff;display:grid;place-items:center;margin-bottom:1rem}.ico .i{width:2.2rem;height:2.2rem}
+.st{font-weight:700;letter-spacing:.08em;font-size:.85rem;color:var(--mut);text-align:left}
+.sl h3{font-size:1.45rem;margin:.3rem 0 .7rem}
+.sl p{margin:0;font-size:1.15rem}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-top:.9rem}
+.dots{display:flex;gap:.5rem}.dots i{width:.8rem;height:.8rem;border-radius:50%;background:var(--line)}.dots i.on{background:var(--k);transform:scale(1.2)}
+.red{--k:var(--red)}.grn{--k:var(--grn)}.vio{--k:var(--acc)}
+
+/* Casos */
+.meter{height:0.9rem;background:var(--bg2);border:2px solid var(--line);border-radius:99px;overflow:hidden;margin:.4rem 0 .3rem}.meter span{display:block;height:100%;width:0;background:var(--acc);transition:width .4s}
+#cm2{font-weight:700;margin-bottom:1.2rem;text-align:left}
+details.case{background:var(--card);border:2px solid var(--line);border-radius:1.2rem;margin-bottom:.9rem;overflow:hidden}
+details.case[open]{border-color:var(--acc)}
+summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:1rem;padding:1rem 1.1rem;min-height:4.5rem;text-align:left}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";margin-left:auto;font:700 1.8rem/1 Atkinson Hyperlegible,sans-serif;color:var(--acc2);flex-shrink:0}
+details[open] summary::after{content:"−"}
+.ci{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--acc);color:var(--on);display:grid;place-items:center;flex:none}
+summary b{display:block;font-size:1.15rem}summary small{color:var(--mut);font-size:.9rem;display:block}
+.cb{padding:0 1.2rem 1.3rem 1.2rem}.cb p{margin:.5rem 0}
+.ln{background:var(--bg2);border-left:5px solid var(--acc);border-radius:.6rem;padding:.8rem 1rem}
+
+/* Juegos */
+.game{background:var(--card);border:2px solid var(--line);border-radius:1.4rem;padding:1.4rem;margin-bottom:1.6rem}
+.game h3{font-size:1.35rem;margin-bottom:.3rem}
+.pista{font-size:1.15rem;margin:.6rem 0 1rem;text-align:left}
+.word{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.1rem;justify-content:flex-start}
+.bx{width:3rem;height:3.8rem;border-radius:.6rem;border:2px solid var(--line);background:var(--bg2);display:grid;place-items:center;font:900 1.8rem Merriweather,serif}
+.bx.cur{border-color:var(--acc);box-shadow:0 0 0 3px var(--grid)}.bx.fill{color:var(--grn);border-color:var(--grn)}
+.bank{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.bank button,.chip{min-width:3.5rem;min-height:3.5rem;border-radius:.9rem;border:2px solid var(--acc);background:var(--bg);color:var(--fg);font:900 1.4rem Merriweather,serif;cursor:pointer}
+.chips{display:flex;flex-direction:column;gap:.7rem;margin-bottom:1rem}
+.chip{font:700 1.1rem "Atkinson Hyperlegible",sans-serif;text-align:left;padding:.7rem 1rem;display:flex;gap:.8rem;align-items:center;width:100%}
+.chip b{width:2rem;height:2rem;border-radius:50%;background:var(--grn);color:#fff;display:none;place-items:center;flex:none;font-size:.9rem}
+.chip.ok{border-color:var(--grn);background:rgba(22,101,52,.12)}.chip.ok b{display:grid}
+.msg{min-height:3rem;font-weight:700;font-size:1.1rem;text-align:left}
+.shake{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.stars{color:var(--acc2);font-weight:700;margin-top:.4rem;text-align:left}
+.pacto{background:var(--acc);color:var(--on);border-radius:1.4rem;padding:1.6rem;margin-top:1rem}
+.pacto h3{font-size:1.6rem;color:var(--on);text-align:left}.pacto ol{padding-left:1.4rem;margin:1rem 0 0;font-size:1.15rem}.pacto li{margin:.5rem 0}
+
+footer{padding:2.5rem 0 3rem;text-align:center;color:var(--mut);font-size:.95rem}
+
+/* Ajustes Responsivos Móviles */
+@media (max-width:560px){
+  body{font-size:1.1rem;line-height:1.6}
+  .wrap{padding:0 0.9rem}
+  .vs{grid-template-columns:1fr}
+  .mid{text-align:center}
+  .bx{width:2.4rem;height:3.2rem;font-size:1.4rem}
+  .bank button,.chip{min-width:3rem;min-height:3rem}
+  .btn,.ctl button{min-height:2.8rem;padding:.4rem 0.9rem;font-size:0.95rem}
+  summary{padding:.8rem .9rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .shake{animation:none}
+  .p1,.p2,.p3,.p123,.p12{animation:none;opacity:0}
+  .p4{animation:none;opacity:1}
+  .ghost,.shake3,.flow,.bars rect,.prog i{animation:none}
+  .ghost{opacity:.25}
+  .steps li{grid-area:auto;opacity:1 !important;animation:none;margin-bottom:.7rem}
+  .story-bar{display:none}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="logo" viewBox="0 0 120 120"><path d="M60 8L104 24V58C104 86 86 104 60 112 34 104 16 86 16 58V24Z" fill="#0F0D1A" stroke="#A78BFA" stroke-width="4"/><path d="M34 62L60 38 86 62M42 58V84H78V58" fill="none" stroke="#A78BFA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="6" fill="#A78BFA"/><path d="M57.5 70h5l1.5 11h-8z" fill="#A78BFA"/></symbol>
+<symbol id="phone" viewBox="0 0 24 24"><path d="M6 3h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 12l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 4 5a2 2 0 0 1 2-2z"/></symbol>
+<symbol id="chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="key" viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M12 12h9m-3 0v4m-3-4v3"/></symbol>
+<symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></symbol>
+<symbol id="wave" viewBox="0 0 24 24"><path d="M3 12h2m3-5v10m3-8v6m3-9v12m3-8v4m3-2h2"/></symbol>
+<symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></symbol>
+<symbol id="users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3.5-5 7-5s7 1.5 7 5M16 5a3.5 3.5 0 0 1 0 7M18 15c2.5.5 4 2 4 5"/></symbol>
+<symbol id="alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5m0 3v.01"/></symbol>
+<symbol id="heart" viewBox="0 0 24 24"><path d="M12 20s-8-5-8-11a4.5 4.5 0 0 1 8-2.5A4.5 4.5 0 0 1 20 9c0 6-8 11-8 11z"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="wall" viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v5M15 10v5M9 15v4"/></symbol>
+<symbol id="scale" viewBox="0 0 24 24"><path d="M12 4v16M6 20h12M5 8h14M5 8l-3 7h6zM19 8l-3 7h6z"/></symbol>
+<symbol id="moon" viewBox="0 0 24 24"><path d="M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10z"/></symbol>
+</svg>
+
+<header><div class="wrap">
+<a class="brand" href="#inicio"><svg><use href="#logo"/></svg><span>Código Familiar</span></a>
+<div class="ctl" role="group" aria-label="Ajustes de lectura"><button id="zm" aria-label="Letra más pequeña">A−</button><button id="zp" aria-label="Letra más grande">A+</button><button id="th" aria-label="Cambiar a modo claro u oscuro"><svg class="i"><use href="#moon"/></svg></button></div>
+</div></header>
+
+<main id="inicio">
+<div class="hero"><div class="wrap">
+<div class="hero-header">
+  <span class="tag">PARA ABUELOS, PADRES Y NIETOS</span>
+  <h1>Código Familiar: <em>Que no te Suplanten</em></h1>
+  <p class="lead">Esta guía está hecha para ustedes: para quienes han vivido mucho y merecen estar tranquilos, y para las familias que quieren cuidarlos. Lean con calma. Aquí no hay prisa.</p>
+</div>
+
+<div class="story" id="story">
+<svg class="scene" viewBox="0 0 680 290" role="img" aria-label="Animación en cuatro pasos: un estafador llama a una abuela con la voz copiada de su nieto y pide dinero; la abuela le pide la clave familiar; el estafador no la sabe; la abuela cuelga.">
+  <!-- Fondo -->
+  <rect x="0" y="0" width="680" height="290" rx="18" fill="var(--bg2)"/>
+  <line x1="20" y1="250" x2="660" y2="250" stroke="var(--line)" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- Línea de la llamada -->
+  <g class="p1"><path class="flow" d="M185 125 L505 125" fill="none" stroke="#EF4444" stroke-width="5" stroke-linecap="round" stroke-dasharray="4 14"/>
+    <text class="note" x="345" y="100" text-anchor="middle">Voz copiada con IA</text></g>
+  <g class="p2"><path class="flow" d="M505 125 L185 125" fill="none" stroke="#10B981" stroke-width="5" stroke-linecap="round" stroke-dasharray="4 14"/></g>
+  <g class="p3"><path d="M185 125 L505 125" fill="none" stroke="var(--mut)" stroke-width="4" stroke-linecap="round" stroke-dasharray="4 14" opacity=".6"/></g>
+  <g class="p4">
+    <path d="M185 125 L300 125 M380 125 L505 125" fill="none" stroke="var(--mut)" stroke-width="4" stroke-linecap="round" stroke-dasharray="4 14" opacity=".6"/>
+    <path d="M326 99 L354 151 M354 99 L326 151" stroke="#EF4444" stroke-width="9" stroke-linecap="round"/>
+    <text class="note" x="340" y="176" text-anchor="middle">Llamada cortada</text>
+  </g>
+
+  <!-- ESTAFADOR -->
+  <g class="ghost">
+    <!-- Mesa y computadora que copia la voz -->
+    <rect x="0" y="226" width="92" height="24" rx="4" fill="var(--line)"/>
+    <rect x="12" y="168" width="68" height="46" rx="5" fill="#0B1220" stroke="#64748B" stroke-width="2.5"/>
+    <g class="bars" fill="#F87171"><rect x="22" y="186" width="7" height="22" rx="2"/><rect x="33" y="180" width="7" height="28" rx="2"/><rect x="44" y="190" width="7" height="18" rx="2"/><rect x="55" y="182" width="7" height="26" rx="2"/><rect x="66" y="188" width="7" height="20" rx="2"/></g>
+    <rect x="6" y="214" width="80" height="8" rx="3" fill="#64748B"/>
+    <text x="46" y="158" text-anchor="middle" font-size="20" fill="#F87171" style="font-weight:900">IA</text>
+
+    <g class="shake3">
+      <path d="M97 250 Q97 176 132 176 Q167 176 167 250 Z" fill="#334155"/>
+      <circle cx="132" cy="136" r="35" fill="#1E293B"/>
+      <ellipse cx="132" cy="141" rx="23" ry="21" fill="#0F172A"/>
+      <circle cx="123" cy="138" r="5" fill="#fff"/><circle cx="141" cy="138" r="5" fill="#fff"/>
+      <circle cx="124" cy="139" r="2.4" fill="#0F172A"/><circle cx="142" cy="139" r="2.4" fill="#0F172A"/>
+      <rect x="113" y="147" width="38" height="14" rx="5" fill="#64748B"/>
+      <!-- Brazo con teléfono en la oreja -->
+      <path d="M150 192 Q188 184 168 156" fill="none" stroke="#334155" stroke-width="14" stroke-linecap="round"/>
+      <rect x="157" y="122" width="14" height="36" rx="4" fill="#1E293B" stroke="#94A3B8" stroke-width="2"/>
+      <!-- Sudor (paso 3) -->
+      <g class="p3"><path d="M100 112 q-7 11 0 16 q7 -5 0 -16z" fill="#38BDF8"/><path d="M164 100 q-7 11 0 16 q7 -5 0 -16z" fill="#38BDF8"/></g>
+    </g>
+  </g>
+
+  <!-- Globos del estafador -->
+  <g class="p1">
+    <rect x="40" y="12" width="270" height="50" rx="14" fill="#FEE2E2" stroke="#EF4444" stroke-width="3"/>
+    <path d="M136 64 L146 84 L162 64 Z" fill="#FEE2E2" stroke="#EF4444" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="132" y="60" width="34" height="6" fill="#FEE2E2"/>
+    <text class="say" x="175" y="45" text-anchor="middle">¡Necesito dinero ya! 💸</text>
+  </g>
+  <g class="p3">
+    <rect x="40" y="12" width="270" height="50" rx="14" fill="#FEE2E2" stroke="#EF4444" stroke-width="3"/>
+    <path d="M136 64 L146 84 L162 64 Z" fill="#FEE2E2" stroke="#EF4444" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="132" y="60" width="34" height="6" fill="#FEE2E2"/>
+    <text class="say" x="175" y="45" text-anchor="middle">¿Clave…? No sé 😰</text>
+  </g>
+
+  <!-- ABUELA -->
+  <g>
+    <path d="M526 250 Q526 176 570 176 Q614 176 614 250 Z" fill="#7C3AED"/>
+    <circle cx="570" cy="100" r="15" fill="#E2E8F0"/>
+    <circle cx="570" cy="132" r="31" fill="#CBD5E1"/>
+    <circle cx="570" cy="140" r="26" fill="#FDE047"/>
+    <circle cx="560" cy="137" r="7" fill="none" stroke="#1E293B" stroke-width="2.5"/>
+    <circle cx="581" cy="137" r="7" fill="none" stroke="#1E293B" stroke-width="2.5"/>
+    <path d="M565 151 Q571 157 577 151" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Brazo con teléfono en la oreja (pasos 1-3) -->
+    <g class="p123">
+      <path d="M548 194 Q514 186 536 154" fill="none" stroke="#7C3AED" stroke-width="14" stroke-linecap="round"/>
+      <rect x="527" y="118" width="14" height="36" rx="4" fill="#1E293B" stroke="#94A3B8" stroke-width="2"/>
+    </g>
+    <!-- Brazo bajando el teléfono = colgó (paso 4) -->
+    <g class="p4">
+      <path d="M548 196 Q526 214 508 226" fill="none" stroke="#7C3AED" stroke-width="14" stroke-linecap="round"/>
+      <g transform="rotate(75 498 230)"><rect x="480" y="222" width="36" height="16" rx="4" fill="#1E293B" stroke="#94A3B8" stroke-width="2"/></g>
+      <circle cx="498" cy="206" r="14" fill="#EF4444"/>
+      <path d="M491 199 L505 213 M505 199 L491 213" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- Globos de la abuela -->
+  <g class="p2">
+    <rect x="370" y="12" width="270" height="50" rx="14" fill="#DCFCE7" stroke="#10B981" stroke-width="3"/>
+    <path d="M520 64 L538 86 L548 64 Z" fill="#DCFCE7" stroke="#10B981" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="516" y="60" width="36" height="6" fill="#DCFCE7"/>
+    <text class="say" x="505" y="45" text-anchor="middle">🔑 ¿Cuál es la clave?</text>
+  </g>
+  <g class="p4">
+    <rect x="370" y="12" width="270" height="50" rx="14" fill="#DCFCE7" stroke="#10B981" stroke-width="3"/>
+    <path d="M520 64 L538 86 L548 64 Z" fill="#DCFCE7" stroke="#10B981" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="516" y="60" width="36" height="6" fill="#DCFCE7"/>
+    <text class="say" x="505" y="45" text-anchor="middle">Cuelgo y llamo yo 📵</text>
+  </g>
+
+  <!-- Sellos de resultado -->
+  <g class="p3">
+    <rect x="210" y="196" width="260" height="42" rx="21" fill="#EF4444"/>
+    <text x="340" y="225" text-anchor="middle" font-size="22" fill="#fff" style="font-weight:900">✗ NO SABE LA CLAVE</text>
+  </g>
+  <g class="p4">
+    <rect x="210" y="196" width="260" height="42" rx="21" fill="#10B981"/>
+    <text x="340" y="225" text-anchor="middle" font-size="22" fill="#fff" style="font-weight:900">✓ ESTAFA EVITADA</text>
+  </g>
+
+  <!-- Etiquetas -->
+  <text class="lbl" x="132" y="277" text-anchor="middle">ESTAFADOR</text>
+  <text class="lbl" x="570" y="277" text-anchor="middle">ABUELA</text>
+</svg>
+
+<ol class="steps">
+  <li><span class="n">1</span><div><b>El estafador llama con la voz copiada de tu nieto</b><span class="q">“Abuela, tuve un accidente, ¡necesito dinero ya!”</span></div></li>
+  <li><span class="n">2</span><div><b>La abuela no se asusta: pide la clave familiar</b><span class="q">“Antes de nada, dime la clave de la familia.”</span></div></li>
+  <li><span class="n">3</span><div><b>El estafador no la sabe y no puede responder</b><span class="q">“Eh… ¿cuál clave? …”</span></div></li>
+  <li><span class="n">4</span><div><b>La abuela cuelga y llama al número de siempre</b><span class="q">“Te cuelgo. Voy a llamar yo a mi nieto.” Estafa evitada.</span></div></li>
+</ol>
+
+<div class="story-bar">
+  <div class="prog" aria-hidden="true"><i></i></div>
+  <button type="button" id="storyBtn" aria-pressed="false">⏸ Pausar</button>
+</div>
+</div>
+
+<div class="conf">
+<small>EL CONFLICTO DE FONDO</small>
+<p class="big">La asimetría del delito algorítmico (IA) <i>vs.</i> la contrainteligencia analógica descentralizada</p>
+<p>En palabras sencillas: los estafadores usan máquinas muy modernas para copiar la voz de quienes amamos. Nosotros respondemos con algo muy antiguo y muy astuto: un acuerdo de familia, hecho a mano.</p>
+<div class="vs"><div class="side r"><b>Ellos</b>Inteligencia artificial, voz clonada y mensajes falsos enviados en masa.</div><div class="mid">VS</div><div class="side g"><b>Nosotros</b>Una palabra secreta, un pacto familiar y una llamada de vuelta.</div></div>
+</div>
+<div class="pills"><a href="#ideas">Las 3 ideas</a><a href="#casos">Casos reales</a><a href="#juegos">Juegos para la mente</a><a href="#pacto">Su pacto</a></div>
+</div></div>
+
+<section id="ideas"><div class="wrap">
+<h2>Tres ideas para entender todo</h2>
+<p class="sub">Deslicen cada tarjeta hacia el lado o usen los botones. Son solo tres ideas cortas por tema.</p>
+
+<div class="car red"><div class="ch"><div class="num">1</div><div><b>La Brecha Digital</b><span>El villano · El muro</span></div></div>
+<div class="track">
+<article class="sl"><div class="ico"><svg class="i"><use href="#wall"/></svg></div><div class="st">EL MURO</div><h3>Un muro de tecnología</h3><p>La brecha es de poder y de herramientas. De un lado, delincuentes con tecnología de vanguardia. Del otro, familias que nunca recibieron las mismas defensas.</p></article>
+<article class="sl"><div class="ico"><svg class="i"><use href="#wave"/></svg></div><div class="st">SUS ARMAS</div><h3>Voz clonada y mensajes automáticos</h3><p>La inteligencia artificial copia una voz con pocos segundos de audio. Y el phishing automatizado manda miles de mensajes falsos a la vez, sin cansarse.</p></article>
+<article class="sl"><div class="ico"><svg class="i"><use href="#user"/></svg></div><div class="st">LA DESVENTAJA</div><h3>No es falta de inteligencia</h3><p>Las personas mayores no cuentan con herramientas institucionales de defensa y quedan en total desventaja frente al algoritmo. Caer no es culpa tuya: es una pelea despareja.</p></article>
+</div><div class="nav"><button class="btn o pv">← Atrás</button><div class="dots"></div><button class="btn nx">Siguiente →</button></div></div>
+
+<div class="car grn"><div class="ch"><div class="num">2</div><div><b>La Guerrilla Digital</b><span>El arma · La resistencia</span></div></div>
+<div class="track">
+<article class="sl"><div class="ico"><svg class="i"><use href="#home"/></svg></div><div class="st">LA RESPUESTA</div><h3>Si nadie llega, respondemos nosotros</h3><p>Ni el Estado ni las grandes tecnológicas logran proteger a todos. Por eso nace una defensa táctica y descentralizada: la que hacemos entre familia.</p></article>
+<article class="sl"><div class="ico"><svg class="i"><use href="#key"/></svg></div><div class="st">LA PALABRA CLAVE FAMILIAR</div><h3>Una contraseña hablada</h3><p>Una palabra que solo ustedes conocen. La IA puede copiar una voz, pero no puede adivinar un secreto que nunca estuvo en internet.</p></article>
+<article class="sl"><div class="ico"><svg class="i"><use href="#shield"/></svg></div><div class="st">PROTOCOLOS CASEROS</div><h3>Contrainteligencia de bajo costo</h3><p>Colgar, llamar al número de siempre y avisar a la familia. Pasos simples, sin costo y sin aparatos, que nacen de la comunidad y cualquiera puede enseñar.</p></article>
+</div><div class="nav"><button class="btn o pv">← Atrás</button><div class="dots"></div><button class="btn nx">Siguiente →</button></div></div>
+
+<div class="car vio"><div class="ch"><div class="num">3</div><div><b>El Choque (“En Contra”)</b><span>Astucia humana contra máquina</span></div></div>
+<div class="track">
+<article class="sl"><div class="ico"><svg class="i"><use href="#users"/></svg></div><div class="st">UN PACTO ANALÓGICO</div><h3>Un acuerdo hecho a mano</h3><p>Una promesa dicha en voz alta y en confianza, frente a un ataque diseñado por algoritmos. Parece poco, pero es astuta.</p></article>
+<article class="sl"><div class="ico"><svg class="i"><use href="#x"/></svg></div><div class="st">VENTAJA NEUTRALIZADA</div><h3>La clave deja obsoleto el ataque</h3><p>La IA imita cada gesto de la voz, pero no puede responder lo que no sabe. La ventaja táctica del ataque sofisticado queda anulada.</p></article>
+<article class="sl"><div class="ico"><svg class="i"><use href="#scale"/></svg></div><div class="st">LA LECCIÓN</div><h3>Lo humano puede vencer a lo avanzado</h3><p>Una táctica humana y descentralizada puede derrotar a una agresión tecnológica avanzada. No hace falta más tecnología: hace falta más familia.</p></article>
+</div><div class="nav"><button class="btn o pv">← Atrás</button><div class="dots"></div><button class="btn nx">Siguiente →</button></div></div>
+</div></section>
+
+<section id="casos"><div class="wrap">
+<h2>Casos que pueden pasar</h2>
+<p class="sub">Toquen cada historia para leerla. Cada una enseña algo distinto. Los nombres son inventados para aprender.</p>
+<div class="meter"><span id="cm"></span></div><div id="cm2">Casos leídos: 0 de 8</div>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#phone"/></svg></span><span><b>Rosa y la llamada de madrugada</b><small>Toca para leer</small></span></summary><div class="cb"><p>Son las once de la noche. Suena el teléfono y es la voz de su nieto Tomás, llorando: “Abuela, choqué, necesito dinero ya”. Rosa casi corre al banco, pero cuelga y llama al número de siempre de Tomás. Él contesta, tranquilo y medio dormido.</p><p class="ln"><b>Lo que aprendemos:</b> el problema no es el teléfono. Es que una máquina ya puede copiar la voz de quien amas.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#chat"/></svg></span><span><b>Mario y el audio de WhatsApp</b><small>Toca para leer</small></span></summary><div class="cb"><p>Llega un audio de un número desconocido: “Papá, cambié de número, ¿me ayudas con un pago?”. Suena igual a su hija. Mario le escribe al número de siempre de ella y ella no sabe nada del audio.</p><p class="ln"><b>Lo que aprendemos:</b> puede aparecer en llamadas, mensajes, audios o videos. Cualquier lugar donde alguien te hable.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#wave"/></svg></span><span><b>El video del cumpleaños de Carmen</b><small>Toca para leer</small></span></summary><div class="cb"><p>Su nieta subió a redes un video público de su fiesta. De ahí, unos pocos segundos de voz bastaron para fabricar una copia. Carmen descubrió el engaño cuando la “nieta” no supo decir la palabra clave de la familia.</p><p class="ln"><b>Lo que aprendemos:</b> la voz se copia con audios públicos, y se comprueba con algo que solo la familia sabe.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#users"/></svg></span><span><b>Luis y las llamadas en masa</b><small>Toca para leer</small></span></summary><div class="cb"><p>Luis cree que lo eligieron a él, pero en realidad llaman a miles de personas a la vez, esperando que alguien caiga. Esta vez nadie cayó: Luis colgó y llamó a su hijo. La decisión final fue suya.</p><p class="ln"><b>Lo que aprendemos:</b> gana quien engaña a muchos, pierde la familia que se asusta, y quien decide siempre eres tú.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#clock"/></svg></span><span><b>La noche del jueves</b><small>Toca para leer</small></span></summary><div class="cb"><p>Jueves, 11:40 de la noche. Llaman diciendo “accidente, hospital, hay que pagar ya”. Eligen la noche y la prisa porque cuando estamos cansados pensar cuesta más. La familia Díaz había escogido su clave el domingo en la cena, y esa noche estaba lista.</p><p class="ln"><b>Lo que aprendemos:</b> el mejor momento para prepararse es hoy, antes de que llamen.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#heart"/></svg></span><span><b>Elena y el gran susto</b><small>Toca para leer</small></span></summary><div class="cb"><p>Le dicen que su hija fue secuestrada y que pague de inmediato. A Elena le tiemblan las manos. Con el miedo, el cerebro piensa menos y obedece más: esa es la jugada. Elena respira, pide la clave y la llamada se corta.</p><p class="ln"><b>Lo que aprendemos:</b> funciona porque el susto nos apura. La clave nos devuelve la calma.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#scale"/></svg></span><span><b>La familia Ramírez decide</b><small>Toca para leer</small></span></summary><div class="cb"><p>Probaron una aplicación complicada, una contraseña larguísima y, al final, una sola palabra. Ganó la palabra: es gratis, se recuerda fácil y no necesita tecnología. Como segunda opción acordaron colgar y llamar al número de siempre.</p><p class="ln"><b>Lo que aprendemos:</b> la mejor solución es la más simple que toda la familia pueda usar.</p></div></details>
+
+<details class="case"><summary><span class="ci"><svg class="i"><use href="#shield"/></svg></span><span><b>Pedro olvidó la clave</b><small>Toca para leer</small></span></summary><div class="cb"><p>Pedro no recordó la palabra. No pasó nada: colgó y llamó él mismo al número de siempre de su hijo. Si era verdad, el hijo contestó y le explicó. Si era mentira, la estafa terminó ahí.</p><p class="ln"><b>Lo que aprendemos:</b> siempre existe un plan B. Colgar y llamar tú nunca falla.</p></div></details>
+</div></section>
+
+<section id="juegos"><div class="wrap">
+<h2>Gimnasio para la mente</h2>
+<p class="sub">Jueguen un ratito cada día. Ejercitan la memoria y, de paso, aprenden palabras que cuidan a la familia.</p>
+
+<div class="game" id="g1"><h3>Completa la palabra</h3><div class="stars" id="g1s"></div><div class="pista" id="g1p"></div><div class="word" id="g1w"></div><div class="bank" id="g1b"></div><div class="msg" id="g1m" aria-live="polite"></div><button class="btn" id="g1n" style="display:none">Siguiente palabra →</button></div>
+
+<div class="game" id="g2"><h3>Ordena los pasos</h3><div class="pista" id="g2p"></div><div class="chips" id="g2c"></div><div class="msg" id="g2m" aria-live="polite"></div><button class="btn" id="g2n" style="display:none">Siguiente reto →</button></div>
+</div></section>
+
+<section id="pacto"><div class="wrap">
+<div class="pacto"><h3>Su pacto familiar empieza esta noche</h3>
+<ol><li>Siéntense juntos, en la cena o en una llamada.</li><li>Elijan una palabra que solo ustedes conozcan.</li><li>Anótenla a mano, guárdenla en un lugar seguro y no la escriban en redes.</li><li>Practíquenla una vez, riéndose un poco.</li></ol></div>
+</div></section>
+</main>
+<footer><div class="wrap">Código Familiar: Que no te Suplanten · @laclave.ya<br>Los casos son ejemplos inventados con fines educativos.</div></footer>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},R=document.documentElement;
+/* ajustes */
+var z=0;function sz(d){z=Math.max(0,Math.min(2,z+d));R.className=z?'z'+z:''}
+$('zm').onclick=function(){sz(-1)};$('zp').onclick=function(){sz(1)};
+$('th').onclick=function(){R.setAttribute('data-theme',R.getAttribute('data-theme')==='dark'?'light':'dark')};
+/* carruseles */
+document.querySelectorAll('.car').forEach(function(c){
+ var t=c.querySelector('.track'),n=t.children.length,d=c.querySelector('.dots'),i;
+ for(i=0;i<n;i++)d.appendChild(document.createElement('i'));
+ function cur(){return Math.round(t.scrollLeft/(t.children[0].offsetWidth+16))}
+ function up(){var k=cur();[].forEach.call(d.children,function(e,j){e.className=j===k?'on':''})}
+ function go(k){k=Math.max(0,Math.min(n-1,k));t.scrollTo({left:k*(t.children[0].offsetWidth+16),behavior:'smooth'})}
+ t.addEventListener('scroll',up);up();
+ c.querySelector('.nx').onclick=function(){go(cur()+1)};c.querySelector('.pv').onclick=function(){go(cur()-1)};
+});
+/* casos */
+var cs=document.querySelectorAll('details.case');
+function cnt(){var k=0;cs.forEach(function(e){if(e.dataset.r)k++});$('cm').style.width=(k/cs.length*100)+'%';$('cm2').textContent=k===cs.length?'★ ¡Familia protegida! Leyeron los '+cs.length+' casos.':'Casos leídos: '+k+' de '+cs.length}
+cs.forEach(function(e){e.addEventListener('toggle',function(){if(e.open){e.dataset.r=1;cnt()}})});
+/* juego 1 */
+var W=[["CLAVE",[1,3],"La palabra secreta que solo la familia conoce.","Elíjanla juntos y nunca la escriban en redes."],
+["FAMILIA",[2,4],"Las personas de tu círculo de confianza.","Con ellos se acuerda la clave."],
+["COLGAR",[2,3],"Lo primero que haces ante una llamada dudosa.","Colgar es cuidar, no es mala educación."],
+["ESTAFA",[2,4],"Engaño para quitarte dinero.","Casi siempre llega con prisa."],
+["CONFIANZA",[3,6],"Se da a la familia, pero se verifica cuando piden dinero.","Verificar no es desconfiar."],
+["PROTEGER",[3,5],"Lo que hacemos juntos por quienes amamos.","Un pacto familiar protege a todos."]];
+var gi=0,cp=0,er=0,sc=0;
+function shuf(a){return a.sort(function(){return Math.random()-.5})}
+function g1(){
+ if(gi>=W.length){$('g1p').textContent='¡Terminaste las '+W.length+' palabras!';$('g1w').innerHTML='';$('g1b').innerHTML='';$('g1m').textContent='';$('g1s').textContent='★ '+sc+' de '+W.length+' sin errores';var b=$('g1n');b.textContent='Jugar otra vez';b.style.display='inline-block';b.onclick=function(){gi=0;sc=0;g1()};return}
+ var w=W[gi],bl=w[1],ls=[],ex='ABDHJKMPQSUVXY'.split('').filter(function(x){return w[0].indexOf(x)<0});
+ cp=0;er=0;$('g1n').style.display='none';$('g1n').textContent='Siguiente palabra →';
+ $('g1s').textContent='Palabra '+(gi+1)+' de '+W.length+' · ★ '+sc;
+ $('g1p').textContent='Pista: '+w[2];$('g1m').textContent='';
+ bl.forEach(function(k){ls.push(w[0][k])});ls=shuf(ls.concat(shuf(ex).slice(0,2)));
+ draw();$('g1b').innerHTML='';
+ ls.forEach(function(L){var b=document.createElement('button');b.textContent=L;b.setAttribute('aria-label','Letra '+L);b.onclick=function(){pick(L,b)};$('g1b').appendChild(b)});
+}
+function draw(){var w=W[gi],h='';for(var k=0;k<w[0].length;k++){var ix=w[1].indexOf(k);
+ if(ix<0)h+='<div class="bx">'+w[0][k]+'</div>';else if(ix<cp)h+='<div class="bx fill">'+w[0][k]+'</div>';else h+='<div class="bx'+(ix===cp?' cur':'')+'">&nbsp;</div>'}
+ $('g1w').innerHTML=h}
+function pick(L,b){var w=W[gi];
+ if(L===w[0][w[1][cp]]){cp++;draw();$('g1m').textContent='';
+  if(cp===w[1].length){if(!er)sc++;$('g1s').textContent='Palabra '+(gi+1)+' de '+W.length+' · ★ '+sc;$('g1m').textContent='¡Muy bien! '+w[3];$('g1b').innerHTML='';gi++;if(gi>=W.length)$('g1n').textContent='Ver resultado';$('g1n').style.display='inline-block';$('g1n').onclick=g1}}
+ else{er++;$('g1m').textContent='Casi. Prueba con otra letra.';b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}}
+g1();
+/* juego 2 */
+var Q=[["Suena una llamada sospechosa. Toquen los pasos en el orden correcto.",["Cuelga","Llama tú al número de siempre","Avisa a la familia"]],
+["Preparen su pacto familiar. Toquen los pasos en orden.",["Elijan una palabra juntos","Anótenla a mano y guárdenla","Practíquenla en la cena"]]];
+var qi=0,qs=0;
+function g2(){
+ if(qi>=Q.length){$('g2p').textContent='¡Completaron los dos retos!';$('g2c').innerHTML='';$('g2m').textContent='';var b=$('g2n');b.textContent='Jugar otra vez';b.style.display='inline-block';b.onclick=function(){qi=0;g2()};return}
+ var q=Q[qi];qs=0;$('g2n').style.display='none';$('g2n').textContent='Siguiente reto →';$('g2m').textContent='';$('g2p').textContent=q[0];$('g2c').innerHTML='';
+ shuf(q[1].map(function(s,k){return[s,k]})).forEach(function(a){var b=document.createElement('button');b.className='chip';b.innerHTML='<b>✓</b><span>'+a[0]+'</span>';
+  b.onclick=function(){if(b.classList.contains('ok'))return;
+   if(a[1]===qs){qs++;b.classList.add('ok');b.querySelector('b').textContent=qs;
+    if(qs===q[1].length){$('g2m').textContent='¡Perfecto! Ese es el orden.';qi++;if(qi>=Q.length)$('g2n').textContent='Terminar';$('g2n').style.display='inline-block';$('g2n').onclick=g2}}
+   else{$('g2m').textContent='Piensen qué va primero y prueben otra vez.';b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake')}};
+  $('g2c').appendChild(b)})}
+g2();
+})();
+</script>
+<script>
+(function(){var s=document.getElementById('story'),b=document.getElementById('storyBtn');if(!s||!b)return;
+b.addEventListener('click',function(){var p=s.classList.toggle('paused');b.textContent=p?'▶ Reanudar':'⏸ Pausar';b.setAttribute('aria-pressed',p)})})();
+</script>
+</body>
+</html>
